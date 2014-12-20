@@ -85,6 +85,15 @@ function updateLines(lines, dt)
 			end
 
 			line.y = line.y + (speed * line.direction)
+
+		else
+			if line.x + lineLength > love.graphics.getWidth() then
+				line.direction = -1
+			elseif line.y < 0 then
+				line.direction = 1
+			end
+
+			line.x = line.x + (speed * line.direction)
 		end
 	end
 end
