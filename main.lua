@@ -1,23 +1,29 @@
 -- [[ LÖVE2D CALLBACKS ]]--
 function love.load()
 	player = {}
-	player.x, player.y = 50, 50
+	player.x, player.y = 0, 0
 	player.speed = 100
 	player.color = {200, 50, 50}
+	player.size = 10
 
 	objective = {}
 	objective.x, objective.y = 75, 75
 	objective.color = {50, 50, 200}
+	objective.size = 10
 
 	-- lines = {{x, y, vertical, direction, color}}
 	lines = {{x=100, y=100, vertical=false, direction=1, color={50, 50, 200}}, {x=150, y=150, vertical=true, direction=1, color={50, 50, 200}}}
 	lineLength = 20
+	lineWidth = 1
 	lineSpeed = 100
+
+	love.graphics.setLineStyle("smooth")
 end
 
 function love.update(dt)
 	keyHandler(dt)
 	updateLines(lines, dt)
+	collisionHandler(player, lines, objective)
 end
 
 function love.draw()
@@ -30,6 +36,8 @@ end
 
 
 --[[ FUNCTIONS ]]--
+
+-- key functions
 function keyHandler(dt)
 	local speed = player.speed * dt
 
@@ -53,15 +61,16 @@ end
 -- draw functions
 function drawPlayer(x, y)
 	love.graphics.setColor(player.color[1], player.color[2], player.color[3])
-	love.graphics.circle("fill", x, y, 10, 25)
+	love.graphics.circle("fill", x, y, player.size, 25)
 end
 
 function drawObjective(x, y)
 	love.graphics.setColor(objective.color[1], objective.color[2], objective.color[3])
-	love.graphics.circle("fill", objective.x, objective.y, 10, 25)
+	love.graphics.circle("fill", objective.x, objective.y, objective.size, 25)
 end
 
 function drawLines(lines)
+	love.graphics.setLineWidth(lineWidth)
 	for key, line in pairs(lines) do
 		love.graphics.setColor(line.color[1], line.color[2], line.color[3])
 
@@ -89,11 +98,55 @@ function updateLines(lines, dt)
 		else
 			if line.x + lineLength > love.graphics.getWidth() then
 				line.direction = -1
-			elseif line.y < 0 then
+			elseif line.x < 0 then
 				line.direction = 1
 			end
 
 			line.x = line.x + (speed * line.direction)
 		end
+	end
+end
+
+function collisionHandler(player, lines, objective)
+	-- lines
+	for key, line in pairs(lines) do
+		if line.vertical then
+			if line.x > player.x - player.size
+				and line.x < player.x + player.size
+				and line.y + lineLength > player.y - player.size
+				and line.y < player.y + player.size then
+				print("collision!")
+			end
+
+		else
+			if line.x + lineLength > player.x - player.size
+				and line.x < player.x + player.size
+				and line.y > player.y - player.size
+				and line.y < player.y + player.size then
+				print("collision!")
+			end
+		end
+	end
+
+	-- objective
+	if objective.x + objective.size > player.x - player.size
+		and objective.x - objective.size < player.x + player.size
+		and objective.y + objective.size > player.y - player.size
+		and objective.y - objective.size < player.y + player.size then
+		levelUp()
+		updateObjective()
+	end
+end
+
+
+-- other functions
+function levelUp()
+	local vy, vx, hy, hx
+	level = level + 1
+
+	if player.y > love.graphics.getHeight() / 2 then
+		vy, hy = math.random(1, love.graphics.getHeight() / 2 - player.size), math.random(1, love.graphics.getHeight() / 2 - player.size)
+	else
+		vy, hy = math.random(1, love.graphics.getHeight() / 2 - player.size), math.random(1, love.graphics.getHeight() / 2 - player.size)
 	end
 end
