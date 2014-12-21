@@ -90,9 +90,6 @@ function keyHandler(dt)
 
 	if love.keyboard.isDown("escape") then
 		love.event.quit()
-	elseif love.keyboard.isDown("f11") then
-		fullscreen = not fullscreen
-		love.window.setFullscreen(fullscreen, "desktop")
 	end
 end
 
