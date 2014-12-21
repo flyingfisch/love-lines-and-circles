@@ -16,9 +16,4 @@ Debian-based Linux distros you can install it with this command:
 $ sudo apt-get install love
 ~~~
 
-To run Lines and Circles, just execute the following commands:
-
-~~~
-$ git clone https://github.com/flyingfisch/love-lines-and-circles
-$ love ./love-lines-and-circles/
-~~~
+To run Lines and Circles, just double-click on `lines-and-circles.love`
