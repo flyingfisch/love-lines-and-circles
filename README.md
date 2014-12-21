@@ -1,6 +1,8 @@
 Lines and Circles (Love2D)
 ==========================
 
+![Screenshot](screenshot.png)
+
 Nab the blue circles and don't get hit by the lines. Have fun!
 
 
