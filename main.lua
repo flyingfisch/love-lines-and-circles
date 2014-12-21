@@ -4,6 +4,7 @@ function love.load()
 
 	score = 0
 	showTitle, showLose, showGame = true, false, false
+	fullscreen = false
 
 	fonts = {}
 	fonts.arvo = {}
@@ -89,6 +90,9 @@ function keyHandler(dt)
 
 	if love.keyboard.isDown("escape") then
 		love.event.quit()
+	elseif love.keyboard.isDown("f11") then
+		fullscreen = not fullscreen
+		love.window.setFullscreen(fullscreen, "desktop")
 	end
 end
 
@@ -224,6 +228,7 @@ function title()
 	love.graphics.print("Lines and Circles", 50, 50)
 	love.graphics.setFont(fonts.arvo.m)
 	love.graphics.print("Press ENTER to play!", 50, 150)
+	love.graphics.print("Use arrow keys to move", 50, 190)
 	love.graphics.setFont(fonts.arvo.s)
 	love.graphics.print("Developed by Mark Fischer, Jr.", 50, 450)
 end
