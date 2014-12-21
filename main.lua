@@ -1,5 +1,7 @@
 -- [[ LÖVE2D CALLBACKS ]]--
 function love.load()
+	love.window.setTitle("Lines and Circles")
+
 	score = 0
 	showTitle, showLose, showGame = true, false, false
 

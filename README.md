@@ -1,4 +1,4 @@
-love-lines-and-circles
-======================
+Lines and Circles (Love2D)
+==========================
 
-Don't get hit by the lines!
+Nab the blue circles and don't get hit by the lines. Have fun!
