@@ -15,7 +15,7 @@ function love.load()
 	player = {}
 	player.x, player.y = 200, 200
 	player.speed = 100
-	player.color = {200, 50, 50}
+	player.color = {250, 150, 50}
 	player.size = 10
 
 	objective = {}
