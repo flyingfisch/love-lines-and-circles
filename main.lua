@@ -72,15 +72,15 @@ function keyHandler(dt)
 	elseif showGame then
 		local speed = player.speed * dt
 
-		if love.keyboard.isDown("left") then
+		if love.keyboard.isDown("left") and player.x - player.size > 0 then
 			player.x = player.x - speed
-		elseif love.keyboard.isDown("right") then
+		elseif love.keyboard.isDown("right") and player.x + player.size < love.graphics.getWidth() then
 			player.x = player.x + speed
 		end
 
-		if love.keyboard.isDown("up") then
+		if love.keyboard.isDown("up") and player.y - player.size > 0 then
 			player.y = player.y - speed
-		elseif love.keyboard.isDown("down") then
+		elseif love.keyboard.isDown("down") and player.y + player.size < love.graphics.getHeight() then
 			player.y = player.y + speed
 		end
 	end
