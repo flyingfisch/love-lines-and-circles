@@ -1,6 +1,6 @@
 -- [[ LÖVE2D CALLBACKS ]]--
 function love.load()
-	level = 0
+	score = 0
 	showTitle, showLose, showGame = true, false, false
 
 	fonts = {}
@@ -18,7 +18,7 @@ function love.load()
 
 	objective = {}
 	objective.x, objective.y = 75, 75
-	objective.color = {50, 50, 200}
+	objective.color = {50, 50, 255}
 	objective.size = 10
 
 	-- lines = {{x, y, vertical, direction, color}}
@@ -50,6 +50,7 @@ function love.draw()
 		drawObjective(objective.x, objective.y)
 
 		drawLines(lines)
+		drawUI()
 	end
 end
 
@@ -65,9 +66,8 @@ function keyHandler(dt)
 			showGame = true
 		end
 	elseif showLose then
-		if love.keyboard.isDown("return") then
-			showLose = false
-			showTitle = true
+		if love.keyboard.isDown(" ") then
+			love.load()
 		end
 	elseif showGame then
 		local speed = player.speed * dt
@@ -112,6 +112,12 @@ function drawLines(lines)
 			love.graphics.line(line.x, line.y, line.x + lineLength, line.y)
 		end
 	end
+end
+
+function drawUI()
+	love.graphics.setColor(255, 255, 255)
+	love.graphics.setFont(fonts.arvo.m)
+	love.graphics.print("Score: " .. score, 10, 10)
 end
 
 -- update functions
@@ -178,7 +184,7 @@ end
 -- other functions
 function levelUp()
 	local vy, vx, hy, hx
-	level = level + 1
+	score = score + 100
 
 	if player.x > love.graphics.getWidth() / 2 then
 		vx, hx = math.random(1, love.graphics.getWidth() / 2 - player.size), math.random(1, love.graphics.getWidth() / 2 - player.size)
@@ -202,6 +208,8 @@ function updateObjective()
 end
 
 function title()
+	love.graphics.setColor(255, 255, 255)
+
 	love.graphics.setFont(fonts.arvo.l)
 	love.graphics.print("Lines and Circles", 50, 50)
 	love.graphics.setFont(fonts.arvo.m)
@@ -211,6 +219,11 @@ function title()
 end
 
 function lose()
+	love.graphics.setColor(255, 255, 255)
+
 	love.graphics.setFont(fonts.arvo.l)
-	love.graphics.print("YOU LOSE! HA HA HA!", 50, 50)
+	love.graphics.print("GAME OVER", 50, 50)
+	love.graphics.setFont(fonts.arvo.m)
+	love.graphics.print("Your score is: " .. score, 50, 150)
+	love.graphics.print("Press SPACE to continue!", 50, 350)
 end
