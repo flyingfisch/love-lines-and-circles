@@ -1,5 +1,7 @@
 -- [[ LÖVE2D CALLBACKS ]]--
 function love.load()
+	level = 0
+
 	player = {}
 	player.x, player.y = 0, 0
 	player.speed = 100
@@ -13,6 +15,7 @@ function love.load()
 
 	-- lines = {{x, y, vertical, direction, color}}
 	lines = {{x=100, y=100, vertical=false, direction=1, color={50, 50, 200}}, {x=150, y=150, vertical=true, direction=1, color={50, 50, 200}}}
+	lineColor = {50, 50, 200}
 	lineLength = 20
 	lineWidth = 1
 	lineSpeed = 100
@@ -22,8 +25,8 @@ end
 
 function love.update(dt)
 	keyHandler(dt)
-	updateLines(lines, dt)
-	collisionHandler(player, lines, objective)
+	updateLines(dt)
+	collisionHandler()
 end
 
 function love.draw()
@@ -83,7 +86,7 @@ function drawLines(lines)
 end
 
 -- update functions
-function updateLines(lines, dt)
+function updateLines(dt)
 	local speed = lineSpeed * dt
 	for key, line in pairs(lines) do
 		if line.vertical then
@@ -107,7 +110,7 @@ function updateLines(lines, dt)
 	end
 end
 
-function collisionHandler(player, lines, objective)
+function collisionHandler()
 	-- lines
 	for key, line in pairs(lines) do
 		if line.vertical then
@@ -144,9 +147,23 @@ function levelUp()
 	local vy, vx, hy, hx
 	level = level + 1
 
+	if player.x > love.graphics.getWidth() / 2 then
+		vx, hx = math.random(1, love.graphics.getWidth() / 2 - player.size), math.random(1, love.graphics.getWidth() / 2 - player.size)
+	else
+		vx, hx = math.random(love.graphics.getWidth() / 2 + player.size, love.graphics.getHeight()), math.random(love.graphics.getWidth() / 2 + player.size, love.graphics.getWidth())
+	end
+
 	if player.y > love.graphics.getHeight() / 2 then
 		vy, hy = math.random(1, love.graphics.getHeight() / 2 - player.size), math.random(1, love.graphics.getHeight() / 2 - player.size)
 	else
-		vy, hy = math.random(1, love.graphics.getHeight() / 2 - player.size), math.random(1, love.graphics.getHeight() / 2 - player.size)
+		vy, hy = math.random(love.graphics.getHeight() / 2 + player.size, love.graphics.getHeight()), math.random(love.graphics.getHeight() / 2 + player.size, love.graphics.getHeight())
 	end
+
+	table.insert(lines, {x = vx, y = vy, vertical = true, direction = 1, color = lineColor})
+	table.insert(lines, {x = hx, y = hy, vertical = false, direction = 1, color = lineColor})
+end
+
+function updateObjective()
+	objective.x = math.random(1, love.graphics.getWidth())
+	objective.y = math.random(1, love.graphics.getHeight())
 end
