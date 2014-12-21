@@ -16,4 +16,8 @@ Debian-based Linux distros you can install it with this command:
 $ sudo apt-get install love
 ~~~
 
+You can install it on Windows by downloading and running the installer.
+[32-bit](https://bitbucket.org/rude/love/downloads/love-0.9.1-win32.exe)
+[64-bit](https://bitbucket.org/rude/love/downloads/love-0.9.1-win64.exe)
+
 To run Lines and Circles, just double-click on `lines-and-circles.love`
