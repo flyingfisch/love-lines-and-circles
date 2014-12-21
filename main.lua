@@ -1,9 +1,17 @@
 -- [[ LÖVE2D CALLBACKS ]]--
 function love.load()
 	level = 0
+	showTitle, showLose, showGame = true, false, false
+
+	fonts = {}
+	fonts.arvo = {}
+	fonts.arvo.path = "Arvo-Regular.ttf"
+	fonts.arvo.l = love.graphics.newFont(fonts.arvo.path, 40)
+	fonts.arvo.m = love.graphics.newFont(fonts.arvo.path, 20)
+	fonts.arvo.s = love.graphics.newFont(fonts.arvo.path, 10)
 
 	player = {}
-	player.x, player.y = 0, 0
+	player.x, player.y = 200, 200
 	player.speed = 100
 	player.color = {200, 50, 50}
 	player.size = 10
@@ -25,15 +33,24 @@ end
 
 function love.update(dt)
 	keyHandler(dt)
-	updateLines(dt)
-	collisionHandler()
+
+	if showGame then
+		updateLines(dt)
+		collisionHandler()
+	end
 end
 
 function love.draw()
-	drawPlayer(player.x, player.y)
-	drawObjective(objective.x, objective.y)
+	if showTitle then
+		title()
+	elseif showLose then
+		lose()
+	elseif showGame then
+		drawPlayer(player.x, player.y)
+		drawObjective(objective.x, objective.y)
 
-	drawLines(lines)
+		drawLines(lines)
+	end
 end
 
 
@@ -42,18 +59,30 @@ end
 
 -- key functions
 function keyHandler(dt)
-	local speed = player.speed * dt
+	if showTitle then
+		if love.keyboard.isDown("return") then
+			showTitle = false
+			showGame = true
+		end
+	elseif showLose then
+		if love.keyboard.isDown("return") then
+			showLose = false
+			showTitle = true
+		end
+	elseif showGame then
+		local speed = player.speed * dt
 
-	if love.keyboard.isDown("left") then
-		player.x = player.x - speed
-	elseif love.keyboard.isDown("right") then
-		player.x = player.x + speed
-	end
+		if love.keyboard.isDown("left") then
+			player.x = player.x - speed
+		elseif love.keyboard.isDown("right") then
+			player.x = player.x + speed
+		end
 
-	if love.keyboard.isDown("up") then
-		player.y = player.y - speed
-	elseif love.keyboard.isDown("down") then
-		player.y = player.y + speed
+		if love.keyboard.isDown("up") then
+			player.y = player.y - speed
+		elseif love.keyboard.isDown("down") then
+			player.y = player.y + speed
+		end
 	end
 
 	if love.keyboard.isDown("escape") then
@@ -118,7 +147,9 @@ function collisionHandler()
 				and line.x < player.x + player.size
 				and line.y + lineLength > player.y - player.size
 				and line.y < player.y + player.size then
-				print("collision!")
+				print("YOU LOST (V)")
+				showLose = true
+				showGame = false
 			end
 
 		else
@@ -126,7 +157,9 @@ function collisionHandler()
 				and line.x < player.x + player.size
 				and line.y > player.y - player.size
 				and line.y < player.y + player.size then
-				print("collision!")
+				print("YOU LOST (H)")
+				showLose = true
+				showGame = false
 			end
 		end
 	end
@@ -166,4 +199,18 @@ end
 function updateObjective()
 	objective.x = math.random(1, love.graphics.getWidth())
 	objective.y = math.random(1, love.graphics.getHeight())
+end
+
+function title()
+	love.graphics.setFont(fonts.arvo.l)
+	love.graphics.print("Lines and Circles", 50, 50)
+	love.graphics.setFont(fonts.arvo.m)
+	love.graphics.print("Press ENTER to play!", 50, 150)
+	love.graphics.setFont(fonts.arvo.s)
+	love.graphics.print("Developed by Mark Fischer, Jr.", 50, 450)
+end
+
+function lose()
+	love.graphics.setFont(fonts.arvo.l)
+	love.graphics.print("YOU LOSE! HA HA HA!", 50, 50)
 end
