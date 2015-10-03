@@ -1,4 +1,4 @@
--- [[ LÖVE2D CALLBACKS ]]--
+--[[ LÖVE2D CALLBACKS ]]--
 function love.load()
 	math.randomseed(os.time() + os.time() ^ 2)
 	love.window.setTitle("Lines and Circles")
@@ -26,7 +26,10 @@ function love.load()
 	objective.size = 10
 
 	-- lines = {{x, y, vertical, direction, color}}
-	lines = {{x=100, y=100, vertical=false, direction=1, color={50, 50, 100}}, {x=150, y=150, vertical=true, direction=1, color={50, 50, 200}}}
+	lines = {
+		{ x=100, y=100, vertical=false, direction=1, color={50, 50, 100} },
+		{ x=150, y=150, vertical=true, direction=1, color={50, 50, 200} }
+	}
 	lineColor = {50, 50, 200}
 	lineLength = 20
 	lineWidth = 1
@@ -202,16 +205,19 @@ function levelUp()
 		vy, hy = math.random(love.graphics.getHeight() / 2 + player.size, love.graphics.getHeight()), math.random(love.graphics.getHeight() / 2 + player.size, love.graphics.getHeight())
 	end
 
-	r1 = math.random(0,255)
-	g1 = math.random(0,255)
-	b1 = math.random(0,255)
+	lineColor1 = generateLineColor()
+	lineColor2 = generateLineColor()
 
-	r2 = math.random(0,255)
-	g2 = math.random(0,255)
-	b2 = math.random(0,255)
+	table.insert(lines, { x = vx, y = vy, vertical = true, direction = 1, color = lineColor1 })
+	table.insert(lines, { x = hx, y = hy, vertical = false, direction = 2, color = lineColor2 })
+end
 
-	table.insert(lines, {x = vx, y = vy, vertical = true, direction = 1, color = {r1, g1, b1}})
-	table.insert(lines, {x = hx, y = hy, vertical = false, direction = 1, color = {r2, g2, b2}})
+function generateLineColor()
+	red = math.random(0, 255)
+	green = math.random(0, 255)
+	blue = math.random(0, 255)
+
+	return {red, green, blue}
 end
 
 function updateObjective()
