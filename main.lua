@@ -1,5 +1,6 @@
 -- [[ LÖVE2D CALLBACKS ]]--
 function love.load()
+	math.randomseed(os.time() + os.time() ^ 2)
 	love.window.setTitle("Lines and Circles")
 
 	score = 0
